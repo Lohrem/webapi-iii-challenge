@@ -44,14 +44,11 @@ async function validateUser(req, res, next) {
 
 async function validatePost(req, res, next) {
   try {
-    if (req.body && Object.keys(req.body).length > 0) {
-      next()
-    } else {
-      res.status(400).json({
-        message: "missing post data"
-      })
-    }
-    if (req.body.text && Object.keys(req.body.text).length > 0) {
+    const {
+      text
+    } = req.body
+    if (text) {
+      req.text = text
       next()
     } else {
       res.status(400).json({
@@ -59,6 +56,7 @@ async function validatePost(req, res, next) {
       })
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
@@ -77,7 +75,7 @@ router.post('/', validateUser, async (req, res) => {
 
 router.post('/:id/posts', validateUserId, validatePost, async (req, res) => {
   try {
-    const post = await Users.insert({ user_id: req.id, text: req.body })
+    const post = await Users.insert({ user_id: req.id, text: req.text })
     res.status(201).json(post)
   } catch (err) {
     console.log(err)
