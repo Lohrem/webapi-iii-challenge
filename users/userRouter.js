@@ -171,4 +171,4 @@ router.put('/:id', validateUserId, validatePost, async (req, res) => {
   }
 })
 
-module.exports = router
+module.exports = router;
